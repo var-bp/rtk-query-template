@@ -1,43 +1,30 @@
-import './styles.css'
-import { useGetPokemonByNameQuery } from './services/pokemon'
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
+import { useGetListUsersQuery, useCreateUserMutation } from './services/users'
+import { selectSomeData } from './store/some-state/slice'
 
-// useGetPokemonByNameQuery('bulbasaur')
+const App = () => {
+  const { data } = useGetListUsersQuery(1)
+  const [createUser, { isLoading }] = useCreateUserMutation()
 
-// currentData: {},
-// data: {},
-// endpointName: "getPokemonByName",
-// fulfilledTimeStamp: 1639928816836,
-// isError: false,
-// isFetching: false,
-// isLoading: false,
-// isSuccess: true,
-// isUninitialized: false,
-// originalArgs: "bulbasaur",
-// refetch: ƒ (),
-// requestId: "LQFQnvZGDhk7smw4b0zUH",
-// startedTimeStamp: 1639928816794,
-// status: "fulfilled",
+  const someState = useSelector(selectSomeData)
 
-export default function App() {
-  const { data, error, isLoading } = useGetPokemonByNameQuery('bulbasaur')
+  const handleClick = () => {
+    createUser({
+      name: 'morpheus',
+      job: 'leader'
+    }).then((res) => console.log('useCreateUserMutation:', res))
+  }
 
-  const someState = useSelector((state) => state?.pokemonApi)
-
-  console.log('someState:', someState);
+  console.log('someState:', someState)
+  console.log('useGetListUsersQuer:', data)
 
   return (
-    <div className="App">
-      {error ? (
-        <>Oh no, there was an error</>
-      ) : isLoading ? (
-        <>Loading...</>
-      ) : data ? (
-        <>
-          <h3>{data.species.name}</h3>
-          <img src={data.sprites.front_shiny} alt={data.species.name} />
-        </>
-      ) : null}
+    <div>
+      <button onClick={handleClick} disabled={isLoading}>
+        {isLoading ? 'Creating...' : 'Create user'}
+      </button>
     </div>
   )
 }
+
+export default App
