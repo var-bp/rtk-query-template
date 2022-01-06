@@ -2,6 +2,9 @@ import { useSelector } from 'react-redux'
 import { useGetListUsersQuery, useCreateUserMutation } from './services/users'
 import { selectSomeData } from './store/some-state/slice'
 
+// https://blog.bitsrc.io/frontend-caching-with-redux-toolkit-query-14e008a632b1
+// https://wanago.io/2021/12/27/redux-toolkit-query-typescript
+
 const App = () => {
   const { data } = useGetListUsersQuery(1)
   const [createUser, { isLoading }] = useCreateUserMutation()
